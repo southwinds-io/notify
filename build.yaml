@@ -1,0 +1,45 @@
+---
+env:
+  BINARY: notify
+  VERSION: 1.0.0-${ARTISAN_REF}
+
+labels:
+  app:entrypoint: notify
+  app:var@NOTIFY_LOGGING:
+  app:var@NOTIFY_EMAIL_FROM: required
+  app:var@NOTIFY_SMTP_USER: required
+  app:var@NOTIFY_SMTP_PWD: required
+  app:var@NOTIFY_SMTP_HOST: required
+  app:var@NOTIFY_SMTP_PORT: required
+
+functions:
+- name: build-linux
+  description: builds the source app package
+  env:
+    GOOS: linux
+    GOARCH: amd64
+  run:
+    - go build -ldflags="-s -w -X 'southwinds.dev/notify/core.Version=${VERSION}'" -o ./bin/${GOOS}/${GOARCH}/${BINARY} -v .
+
+- name: build-mac
+  description: builds the source app package
+  env:
+    GOOS: darwin
+    GOARCH: amd64
+  run:
+    - go build -ldflags="-s -w -X 'southwinds.dev/notify/core.Version=${VERSION}'" -o ./bin/${GOOS}/${GOARCH}/${BINARY} -v .
+
+- name: swagen
+  description: generates/refreshes the OpenAPI specifications for Doorman's Proxy HTTP API
+  run:
+    - swag init -d ./ -g handlers.go --parseDependency *.go
+
+profiles:
+  - name: linux
+    description: build the notify application package
+    default: true
+    type: content/app
+    target: bin/linux/amd64
+    run:
+      - $(build-linux)
+...
