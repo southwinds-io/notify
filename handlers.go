@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	util "southwinds.dev/http"
+	notify "southwinds.dev/notify/client"
 	"southwinds.dev/notify/core"
 	_ "southwinds.dev/notify/docs"
 	"strings"
@@ -27,14 +28,14 @@ import (
 // @Description sends a notification of the specified type
 // @Tags Notifications
 // @Router /notify [post]
-// @Param notification body core.NotificationMsg true "the notification information to send"
+// @Param notification body notify.NotificationMsg true "the notification information to send"
 // @Accept application/yaml, application/json
 // @Produce plain
 // @Failure 400 {string} bad request: the server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing)
 // @Failure 500 {string} internal server error: the server encountered an unexpected condition that prevented it from fulfilling the request.
 // @Success 201 {string} notification has been sent
 func notifyHandler(w http.ResponseWriter, r *http.Request) {
-	notification := new(core.NotificationMsg)
+	notification := new(notify.NotificationMsg)
 	err := util.Unmarshal(r, notification)
 	if util.IsErr(w, err, http.StatusBadRequest, "cannot unmarshal notification") {
 		return

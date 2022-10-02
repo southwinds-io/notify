@@ -8,10 +8,11 @@ package core
 import (
 	"crypto/tls"
 	gomail "gopkg.in/mail.v2"
+	notify "southwinds.dev/notify/client"
 	"strings"
 )
 
-func SendMail(notification NotificationMsg) error {
+func SendMail(notification notify.NotificationMsg) error {
 	// gets the sender information
 	from, err := getEmailFrom()
 	if err != nil {
