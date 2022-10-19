@@ -7,12 +7,13 @@ package main
 import (
 	"github.com/gorilla/mux"
 	h "southwinds.dev/http"
+	notify "southwinds.dev/notify/client"
 	"southwinds.dev/notify/core"
 )
 
 func main() {
 	// creates a generic http server
-	s := h.New("notify", core.Version)
+	s := h.New("notify", notify.Version)
 	// add handlers
 	s.Http = func(router *mux.Router) {
 		if core.IsLoggingEnabled() {
