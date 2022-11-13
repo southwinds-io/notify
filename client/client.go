@@ -19,8 +19,8 @@ type Client struct {
 	host, token string
 }
 
-func New(host, user, pwd string) Client {
-	c := Client{
+func New(host, user, pwd string) *Client {
+	c := &Client{
 		host:  host,
 		token: basicToken(user, pwd),
 	}
