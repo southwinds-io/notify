@@ -23,8 +23,10 @@ func New(host, user, pwd string) *Client {
 	c := &Client{
 		host:  host,
 		token: basicToken(user, pwd),
+		Client: &http.Client{
+			Timeout: 60 * time.Second,
+		},
 	}
-	c.Timeout = 60 * time.Second
 	return c
 }
 
